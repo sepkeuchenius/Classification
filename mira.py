@@ -74,12 +74,23 @@ class MiraClassifier:
 
                 x = self.weights[instance_guess].__sub__(self.weights[correct_label])
                 y = x.__mul__(instance)
+<<<<<<< HEAD
                 print(len(instance))
+=======
+                y = y + 1
+>>>>>>> 3ac31e703e9371abbac8da54d2d297652c2e3fd5
 
 
+                length = 0
+                values = instance.values()
+                for value in values:
+                    length += value ** 2
 
 
-        util.raiseNotDefined()
+                z = 2 * (length)
+                r = y / z
+
+
 
     def classify(self, data ):
         """
