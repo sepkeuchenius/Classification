@@ -61,18 +61,20 @@ class MiraClassifier:
         representing a vector of values.
         """
         "*** YOUR CODE HERE ***"
+
         "Iterating over the iterations and the instances"
         for iterations in range(self.max_iterations):
             for i in range(len(trainingData)):
-                print(type(trainingData))
+                print(type(trainingData[i]))
                 instance = trainingData[i]
                 correct_label = trainingLabels[i]
                 instance_guess = max(self.classify([instance]))
 
                 "The R calculations"
 
-                x = self.weights[instance_guess].__mul__(self.weights[correct_label])
-                r = x.__mul__(instance) + 1
+                x = self.weights[instance_guess].__sub__(self.weights[correct_label])
+                y = x.__mul__(instance)
+                print(len(instance))
 
 
 
