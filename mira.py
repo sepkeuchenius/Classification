@@ -69,29 +69,27 @@ class MiraClassifier:
                     instance = trainingData[i]
                     correct_label = trainingLabels[i]
                     instance_guess = max(self.classify([instance]))
+                    if not instance_guess == correct_label:
+                        "The R calculations"
 
-                    "The R calculations"
+                        x = self.weights[instance_guess].__sub__(self.weights[correct_label])
+                        y = x.__mul__(instance)
+                        y = y + 1.0
+                        length = instance.totalCount()
+                        z = 2 * (length)
+                        if(z == 0):
+                            r = C
+                        else:
+                            float_div = float(y / z)
+                            r = min([C, float_div])
 
-                    x = self.weights[instance_guess].__sub__(self.weights[correct_label])
-                    y = x.__mul__(instance)
-                    y = y + 1.0
+                        "multiply instance by r"
+                        temp_instance = instance.copy()
+                        for key,value in instance.iteritems():
+                            temp_instance[key] = value * r
 
-                    length = instance.totalCount()
-
-                    z = 2 * (length)
-                    if(z == 0):
-                        r = C
-                    else:
-                        float_div = float(y / z)
-                        r = min([C, float_div])
-
-                    "multiply instance by r"
-                    temp_instance = instance.copy()
-                    for key,value in instance.iteritems():
-                        temp_instance[key] = value * r
-
-                    self.weights[correct_label] =   self.weights[correct_label].__add__(temp_instance)
-                    self.weights[instance_guess] = self.weights[instance_guess].__sub__(temp_instance)
+                        self.weights[correct_label] =   self.weights[correct_label].__add__(temp_instance)
+                        self.weights[instance_guess] = self.weights[instance_guess].__sub__(temp_instance)
 
 
 
