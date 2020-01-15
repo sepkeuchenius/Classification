@@ -78,10 +78,7 @@ def enhancedFeatureExtractorDigit(datum):
     features =  basicFeatureExtractorDigit(datum)
 
     "*** YOUR CODE HERE ***"
-    a = datum.getPixels()
-
     "Feature which counts the 'active' pixels in each column"
-
     heightfeatures = util.Counter()
     for x in range(DIGIT_DATUM_HEIGHT):
         heightTotal = 0
@@ -91,7 +88,6 @@ def enhancedFeatureExtractorDigit(datum):
         heightfeatures[x] = heightTotal
 
     "Feature which counts the 'active'pixels in each row"
-    
     widthfeatures = util.Counter()
     for x in range(DIGIT_DATUM_WIDTH):
         widthTotal = 0
@@ -100,11 +96,25 @@ def enhancedFeatureExtractorDigit(datum):
                 widthTotal[x] += 1
         widthfeatures[x] = widthTotal
 
-    "Feature which...."
+    "Feature which counts the active pixels in a square around the current pixel"
 
-
-
-
+    featureSquare = util.Counter()
+    for x in range(FACE_DATUM_WIDTH):
+        for y in range(FACE_DATUM_HEIGHT):
+            total = 0
+            for x1 in range(-1, 1):
+                for y1 in range(-1, 1):
+                    if x+x1 < 0:
+                        break
+                    elif x+x1 => 28:
+                        break
+                    elif y+y1 < 0:
+                        break
+                    elif y+y1 => 28:
+                        break
+                    elif datum.getPixel(x+x1, y+y1) > 0:
+                        total += 1
+            featureSquare[(x, y)] = total
 
     util.raiseNotDefined()
 
