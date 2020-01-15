@@ -71,13 +71,21 @@ class MiraClassifier:
 
                 "The R calculations"
 
-                x = self.weights[instance_guess].__mul__(self.weights[correct_label])
-                r = x.__mul__(instance) + 1
+                x = self.weights[instance_guess].__sub__(self.weights[correct_label])
+                y = x.__mul__(instance)
+                y = y + 1
 
 
+                length = 0
+                values = instance.values()
+                for value in values:
+                    length += value ** 2
 
 
-        util.raiseNotDefined()
+                z = 2 * (length)
+                r = y / z
+
+
 
     def classify(self, data ):
         """
