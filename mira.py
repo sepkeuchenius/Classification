@@ -62,28 +62,30 @@ class MiraClassifier:
         """
         "*** YOUR CODE HERE ***"
         "Iterating over the iterations and the instances"
-        for iterations in range(self.max_iterations):
-            for i in range(len(trainingData)):
-                print(type(trainingData))
-                instance = trainingData[i]
-                correct_label = trainingLabels[i]
-                instance_guess = max(self.classify([instance]))
+        for C in Cgrid:
+            for iterations in range(self.max_iterations):
+                for i in range(len(trainingData)):
+                    print(type(trainingData))
+                    instance = trainingData[i]
+                    correct_label = trainingLabels[i]
+                    instance_guess = max(self.classify([instance]))
 
-                "The R calculations"
+                    "The R calculations"
 
-                x = self.weights[instance_guess].__sub__(self.weights[correct_label])
-                y = x.__mul__(instance)
-                y = y + 1
-
-
-                length = 0
-                values = instance.values()
-                for value in values:
-                    length += value ** 2
+                    x = self.weights[instance_guess].__sub__(self.weights[correct_label])
+                    y = x.__mul__(instance)
+                    y = y + 1
 
 
-                z = 2 * (length)
-                r = y / z
+                    length = 0
+                    values = instance.values()
+                    for value in values:
+                        length += value ** 2
+
+
+                    z = 2 * (length)
+                    r = min(C, y / z)
+                    print r
 
 
 
