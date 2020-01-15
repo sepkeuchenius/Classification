@@ -65,7 +65,6 @@ class MiraClassifier:
         for C in Cgrid:
             for iterations in range(self.max_iterations):
                 for i in range(len(trainingData)):
-                    print(type(trainingData))
                     instance = trainingData[i]
                     correct_label = trainingLabels[i]
                     instance_guess = max(self.classify([instance]))
@@ -76,16 +75,21 @@ class MiraClassifier:
                     y = x.__mul__(instance)
                     y = y + 1
 
-
-                    length = 0
-                    values = instance.values()
-                    for value in values:
-                        length += value ** 2
-
+                    length = instance.totalCount()
 
                     z = 2 * (length)
-                    r = min(C, y / z)
-                    print r
+                    if(z == 0):
+                        r = C
+                    else:
+                        r = min(C, y / z)
+
+                    "multiply instance by r"
+
+                    for key,value in instance.iteritems():
+                        instance[key] = value * r
+
+                    self.weights[correct_label] =   self.weights[correct_label].__add__(instance)
+                    self.weights[instance_guess] = self.weights[instance_guess].__sub__(instance)
 
 
 
