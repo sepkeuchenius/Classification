@@ -71,8 +71,8 @@ class MiraClassifier:
 
                 "The R calculations"
 
-                x = self.weights[instance_guess]._mul_(self.weights[correct_label])
-                r = x._mul_(instance) + 1
+                x = self.weights[instance_guess].__mul__(self.weights[correct_label])
+                r = x.__mul__(instance) + 1
 
 
 
