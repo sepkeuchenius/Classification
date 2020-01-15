@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -61,6 +61,22 @@ class MiraClassifier:
         representing a vector of values.
         """
         "*** YOUR CODE HERE ***"
+        "Iterating over the iterations and the instances"
+        for iterations in range(self.max_iterations):
+            for i in range(len(trainingData)):
+                print(type(trainingData))
+                instance = trainingData[i]
+                correct_label = trainingLabels[i]
+                instance_guess = max(self.classify([instance]))
+
+                "The R calculations"
+
+                x = self.weights[instance_guess]._mul_(self.weights[correct_label])
+                r = x._mul_(instance) + 1
+
+
+
+
         util.raiseNotDefined()
 
     def classify(self, data ):
@@ -77,5 +93,3 @@ class MiraClassifier:
                 vectors[l] = self.weights[l] * datum
             guesses.append(vectors.argMax())
         return guesses
-
-
