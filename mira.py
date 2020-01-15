@@ -75,8 +75,7 @@ class MiraClassifier:
                     x = self.weights[instance_guess].__sub__(self.weights[correct_label])
                     y = x.__mul__(instance)
                     y = y + 1.0
-                    instance = trainingData[i]
-                    length = 0
+
                     length = instance.totalCount()
 
                     z = 2 * (length)
