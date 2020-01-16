@@ -78,8 +78,9 @@ def enhancedFeatureExtractorDigit(datum):
     features =  basicFeatureExtractorDigit(datum)
 
     "*** YOUR CODE HERE ***"
-    "Feature which counts the active pixels in a square around the current pixel, including the pixel itself"
-    "Result: Improvement! 84 correct out of 100 (84.0%), 79 correct out of 100 (79.0%)."
+    "Feature which counts the active pixels in a square around the current pixel, including the pixel itself. If the total of active"
+    "pixels is 3 or higher, set pixel value to 1. Otherwise, set 0."
+    "Result: Improvement! 83 correct out of 100 (83.0%), 80 correct out of 100 (80.0%)."
     featureSquare = util.Counter()
     for x in range(DIGIT_DATUM_WIDTH):
         for y in range(DIGIT_DATUM_HEIGHT):
@@ -96,9 +97,26 @@ def enhancedFeatureExtractorDigit(datum):
                         continue
                     elif datum.getPixel(x+x1, y+y1) > 0:
                         total += 1
+
+            if total > 3:
+                total = 1
+
+            else:
+                total = 0
             featureSquare[(x, y)] = total
 
-    features = featureSquare
+    "Feature which measures Symmetry in the digit"
+    featureSymmetry = util.Counter()
+    for x in range(0, (DIGIT_DATUM_WIDTH/2)):
+        for y in range(0, DIGIT_DATUM_HEIGHT):
+            if datum.getPixel(x, y) == datum.getPixel(DIGIT_DATUM_WIDTH-x-1, DIGIT_DATUM_HEIGHT-y-1):
+                featureSymmetry[(x, y)] = 1
+                featureSymmetry[(DIGIT_DATUM_WIDTH-x, DIGIT_DATUM_HEIGHT-y)] = 1
+            else:
+                featureSymmetry[(x, y)] = 0
+                featureSymmetry[(DIGIT_DATUM_WIDTH-x, DIGIT_DATUM_HEIGHT-y)] = 0
+
+    features = featureSymmetry
     return features
 
 
