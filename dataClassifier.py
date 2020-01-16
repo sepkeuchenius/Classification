@@ -98,77 +98,8 @@ def enhancedFeatureExtractorDigit(datum):
                         total += 1
             featureSquare[(x, y)] = total
 
-
-    # "Feature which counts the total of values of pixels in a 7x7 square, and multiplies the pixelvalue by the value of that count"
-    # "Result: No improvement! Logically because there is no change in weights relatively."
-    # featureDistricts = util.Counter()
-    # districtValues = dict()
-    # totalValue = 0
-    # for x in range(0, 28, 7):
-    #     for y in range(0, 28, 7):
-    #         districtTotal = 0
-    #         for x1 in range(x, x+7):
-    #             for y1 in range(y, y+7):
-    #                 if datum.getPixel(x1, y1) > 0:
-    #                     districtTotal += 1
-    #         districtValues[(x, y)] = districtTotal
-    #         totalValue += districtTotal
-    # for x in range(0, 28, 7):
-    #     for y in range(0, 28, 7):
-    #         val = districtValues[(x, y)]
-    #         relativeDistrictValue = val / float(totalValue)
-    #         for x2 in range(x, x+7):
-    #             for y2 in range(y, y+7):
-    #                 featureDistricts[(x2, y2)] = datum.getPixel(x2, y2) * relativeDistrictValue
-
-    "Feature which totals 'active' pixels in a column, and multiplies the value of a pixel by that 'heightvalue'."
-    "Result: Improvement! 83 correct out of 100 (83.0%). 79 correct out of 100 (79.0%)."
-
-    featureheights = util.Counter()
-    for x in range(DIGIT_DATUM_HEIGHT):
-        total = 0
-        for y in range(DIGIT_DATUM_WIDTH):
-            if datum.getPixel(x, y) > 0:
-                total += 1
-        featureheights[x] = total
-    for x in range(DIGIT_DATUM_HEIGHT):
-        for y in range(DIGIT_DATUM_WIDTH):
-            featureheights[(x, y)] = featureheights[x] * datum.getPixel(x, y)
-
-
-
-    featurewidths = util.Counter()
-    widthValues = dict()
-    for x in range(DIGIT_DATUM_WIDTH):
-        total = 0
-        for y in range(DIGIT_DATUM_HEIGHT):
-            if datum.getPixel(y, x) > 0:
-                total += 1
-        widthValues[x] = total
-    for x in range(DIGIT_DATUM_WIDTH):
-        for y in range(DIGIT_DATUM_HEIGHT):
-            featurewidths[(x, y)] = widthValues[y] * datum.getPixel(x, y)
-
-
-
-    "Feature in which..."
-    districtFeatures = util.Counter()
-    for x in range(0, 28, 4):
-        for y in range(0, 28, 4):
-            districtCount = 0
-            for x1 in range(x, x+4):
-                for y1 in range(y, y+4):
-                    if datum.getPixel(x1, y1) > 0:
-                        districtCount += 1
-            for x2 in range(x, x+4):
-                for y2 in range(x, x+4):
-                    districtFeatures[(x2, y2)] = datum.getPixel(x2, y2) * districtCount
-
     features = featureSquare
-
-
     return features
-
 
 
 def basicFeatureExtractorPacman(state):
