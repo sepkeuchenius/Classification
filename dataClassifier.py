@@ -98,12 +98,15 @@ def enhancedFeatureExtractorDigit(datum):
                         total += 1
             # print total
             z = 8
-            while(z > 0):
-                if total < z:
+            while(z > 2):
+                if total > z:
                     features['density' + str(x) + str(y) + str(z)] = 1
+                    total = total - z
                 else:
                     features['density' + str(x) + str(y) + str(z)] = 0
+                if z==1:break
                 z= z/2
+
 
             # if total > 5:
             #     features["density" + str(x) + str(y)] = [0,0,1]
@@ -127,14 +130,16 @@ def enhancedFeatureExtractorDigit(datum):
         x_sym = 0
         for y in range(0, DIGIT_DATUM_HEIGHT/2):
             if datum.getPixel(x, y) == datum.getPixel(x, DIGIT_DATUM_HEIGHT-y-1):
-                x_sym += 1
-        x = 32
-        while(z > 0):
-            if(z < x):
-                features["symmetry_x" + str(x) + str(z)] = 1
-            else:
-                features["symmetry_x" + str(x) + str(z)] = 0
-            z = z / 2
+                symmetryCount += 1
+    z = 256
+    while(z > 63):
+        if(symmetryCount > z):
+            features["symmetryCount" + str(z)] = 1
+            symmetryCount = symmetryCount - z
+        else:
+            features["symmetryCount" + str(z)] = 0
+        if z==1:break
+        z = z/2
     if symmetryCount > 350:
         features["Symmetry"] = 1
     else:
