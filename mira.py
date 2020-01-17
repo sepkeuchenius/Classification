@@ -63,14 +63,13 @@ class MiraClassifier:
         "*** YOUR CODE HERE ***"
         "Iterating over the iterations and the instances"
         for C in Cgrid:
-            print("C = ", C)
             for iterations in range(self.max_iterations):
                 for i in range(len(trainingData)):
                     instance = trainingData[i]
                     correct_label = trainingLabels[i]
                     instance_guess = max(self.classify([instance]))
                     if not instance_guess == correct_label:
-                        "The R calculations"
+                        "The Tau calculations"
 
                         x = self.weights[instance_guess].__sub__(self.weights[correct_label])
                         y = x.__mul__(instance)
