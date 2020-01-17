@@ -96,6 +96,21 @@ def enhancedFeatureExtractorDigit(datum):
                         continue
                     elif datum.getPixel(x+x1, y+y1) > 0:
                         total += 1
+            # print total
+            z = 8
+            while(z > 0):
+                if total < z:
+                    features['density' + str(x) + str(y) + str(z)] = 1
+                else:
+                    features['density' + str(x) + str(y) + str(z)] = 0
+                z= z/2
+
+            # if total > 5:
+            #     features["density" + str(x) + str(y)] = [0,0,1]
+            # elif total==0:
+            #     features["density" + str(x) + str(y)] = [0,1,0]
+            # else:
+            #     features["density" + str(x) + str(y)] = [1,0,0]
             if total > 3:
                 totalDense += 1
 
@@ -109,9 +124,17 @@ def enhancedFeatureExtractorDigit(datum):
     symmetryCount = 0
     # print datum.getPixel(1,0)
     for x in range(0, (DIGIT_DATUM_WIDTH)):
+        x_sym = 0
         for y in range(0, DIGIT_DATUM_HEIGHT/2):
             if datum.getPixel(x, y) == datum.getPixel(x, DIGIT_DATUM_HEIGHT-y-1):
-                symmetryCount += 1
+                x_sym += 1
+        x = 32
+        while(z > 0):
+            if(z < x):
+                features["symmetry_x" + str(x) + str(z)] = 1
+            else:
+                features["symmetry_x" + str(x) + str(z)] = 0
+            z = z / 2
     if symmetryCount > 350:
         features["Symmetry"] = 1
     else:
@@ -119,15 +142,16 @@ def enhancedFeatureExtractorDigit(datum):
     # print(features["Symmetry"])
 
     "Feature which measures Symmetry in the digit. Symmetry is measured vertically. If the total of symmetric pixels > 350, set feature to 1."
-    vert_symmetryCount = 0
     for x in range(0, DIGIT_DATUM_WIDTH / 2):
+        vert_symmetryCount = 0
+
         for y in range(0, DIGIT_DATUM_HEIGHT):
             if datum.getPixel(x, y) == datum.getPixel(DIGIT_DATUM_WIDTH - x - 1, y):
                 vert_symmetryCount += 1
     if symmetryCount > 300:
-        features["Vert_symmetry"] = 1
+        features["Vert_symmetry"] = True
     else:
-        features["Vert_symmetry"] = 0
+        features["Vert_symmetry"] = False
 
 
     "New Feature which does ????"
@@ -140,9 +164,9 @@ def enhancedFeatureExtractorDigit(datum):
     for x in range(0, DIGIT_DATUM_HEIGHT):
         for y in range(0, DIGIT_DATUM_WIDTH):
             if datum.getPixel(x, y) > 0:
-                if(x < DIGIT_DATUM_HEIGHT  * (3/7)):
+                if(x < DIGIT_DATUM_HEIGHT  * (2/7)):
                     pixelCount_bottom += 1
-                elif(x > DIGIT_DATUM_HEIGHT *  (3/7) and x < (DIGIT_DATUM_HEIGHT) * (4/7)):
+                elif(x > DIGIT_DATUM_HEIGHT *  (2/7) and x < (DIGIT_DATUM_HEIGHT) * (4/7)):
                     pixelCount_middle += 1
                 else:
                     pixelCount_top += 1
