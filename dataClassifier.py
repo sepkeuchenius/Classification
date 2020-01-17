@@ -78,11 +78,15 @@ def enhancedFeatureExtractorDigit(datum):
     features =  basicFeatureExtractorDigit(datum)
 
     "*** YOUR CODE HERE ***"
-    "Feature which counts the active pixels in a square around the current pixel, including the pixel itself. If the total of active"
-    "pixels is 4 or higher, count this as a 'dense' area. If the total of dense areas is higher than 80, set to 1."
-    totalDense = 0
+    "Feature in which we check if there is a loop in a row. If the color of the pixels switches more than 3 times, there is a loop."
+    ""
+
+    loopCount = 0
     for x in range(DIGIT_DATUM_WIDTH):
+        switch = False
+        switchCount = 0
         for y in range(DIGIT_DATUM_HEIGHT):
+<<<<<<< HEAD
             total = 0
             for x1 in range(-1, 1):
                 for y1 in range(-1, 1):
@@ -145,45 +149,84 @@ def enhancedFeatureExtractorDigit(datum):
     else:
         features["Symmetry"] = 0
     # print(features["Symmetry"])
+=======
+            if datum.getPixel(x, y) == 1:
+                if switch == False:
+                    switch = True
+                    switchCount += 1
+            elif datum.getPixel(x,y) == 0:
+                if switch == True:
+                    switch = False
+                    switchCount += 1
+        if switchCount > 3:
+            loopCount += 1
+            features["Looplocation" + str(y)] = 1
+        else:
+            features["Looplocation" + str(y)] = 0
+    for x in range(DIGIT_DATUM_WIDTH):
+        features["Loop" + str(x)] = 0
+        if x == loopCount:
+            features["Loop" + str(x)] = 1
 
-    "Feature which measures Symmetry in the digit. Symmetry is measured vertically. If the total of symmetric pixels > 350, set feature to 1."
+>>>>>>> cb57564160454803c1ebb4b24499799a2d44554d
+
     for x in range(0, DIGIT_DATUM_WIDTH / 2):
         vert_symmetryCount = 0
-
         for y in range(0, DIGIT_DATUM_HEIGHT):
             if datum.getPixel(x, y) == datum.getPixel(DIGIT_DATUM_WIDTH - x - 1, y):
                 vert_symmetryCount += 1
-    if symmetryCount > 300:
-        features["Vert_symmetry"] = True
+
+        if vert_symmetryCount > 20:
+            features["Vert_symmetry" + str(x)] = True
+        else:
+            features["Vert_symmetry" + str(x)] = False
+
+    total_Count = 0
+    for x in range(0, DIGIT_DATUM_WIDTH):
+        for y in range(0, DIGIT_DATUM_HEIGHT):
+            if datum.getPixel(y,x) ==1:
+                total_Count += 1
+    if total_Count > 60:
+        features["Total_Count"] = [1,0,0]
+    elif total_Count > 40:
+        features["Total_Count"] = [0,1,0]
     else:
-        features["Vert_symmetry"] = False
+        features["Total_Count"] = [0,0,1]
+
+    #
+    # density_Count = 0
+    # for x in range(0, DIGIT_DATUM_WIDTH):
+    #     for y in range(0, DIGIT_DATUM_WIDTH):
+    #         neighboursCount = 0
+    #         for x1 in range(-1, 1):
+    #             for y1 in range(-1, 1):
+    #                 if x+x1 < 0:
+    #                     continue
+    #                 elif x+x1 >= 28:
+    #                     continue
+    #                 elif y+y1 < 0:
+    #                     continue
+    #                 elif y+y1 >= 28:
+    #                     continue
+    #                 elif datum.getPixel(x+x1, y+y1) > 0:
+    #                     neighboursCount += 1
+    #         features["Neighbours" + str(x) + str(y)] = neighboursCount
+
+    # for y in range(0, DIGIT_DATUM_WIDTH / 2):
+    #     hor_symmetryCount = 0
+    #     for x in range(0, DIGIT_DATUM_HEIGHT):
+    #         if datum.getPixel(x, y) == datum.getPixel(DIGIT_DATUM_WIDTH - x - 1, y):
+    #             hor_symmetryCount += 1
+    #
+    #     if hor_symmetryCount > 20:
+    #         features["Hor_symmetry" + str(y)] = True
+    #     else:
+    #         features["Hor_symmetry" + str(y)] = False
 
 
-    "New Feature which does ????"
 
-    "Feature which counts the total of active pixels"
-    pixelCount_top = 0
-    pixelCount_middle = 0
-    pixelCount_bottom = 0
-
-    for x in range(0, DIGIT_DATUM_HEIGHT):
-        for y in range(0, DIGIT_DATUM_WIDTH):
-            if datum.getPixel(x, y) > 0:
-                if(x < DIGIT_DATUM_HEIGHT  * (2/7)):
-                    pixelCount_bottom += 1
-                elif(x > DIGIT_DATUM_HEIGHT *  (2/7) and x < (DIGIT_DATUM_HEIGHT) * (4/7)):
-                    pixelCount_middle += 1
-                else:
-                    pixelCount_top += 1
-    if pixelCount_top > pixelCount_middle and pixelCount_top > pixelCount_bottom:
-        features["pixelCount"] = [0,0,1]
-    elif pixelCount_middle > pixelCount_bottom:
-        features["pixelCount"] = [0,1,0]
-    else:
-        features["pixelCount"] = [1,0,0]
-    # print(pixelCount_top, pixelCount_middle, pixelCount_bottom)
-    # print(features["pixelCount"])
     return features
+
 
 
 def basicFeatureExtractorPacman(state):
