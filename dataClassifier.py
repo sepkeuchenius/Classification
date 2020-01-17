@@ -79,9 +79,8 @@ def enhancedFeatureExtractorDigit(datum):
 
     "*** YOUR CODE HERE ***"
     "Feature which counts the active pixels in a square around the current pixel, including the pixel itself. If the total of active"
-    "pixels is 3 or higher, set pixel value to 1. Otherwise, set 0."
-    "Result: Improvement! 83 correct out of 100 (83.0%), 80 correct out of 100 (80.0%)."
-    featureSquare = util.Counter()
+    "pixels is 4 or higher, count this as a 'dense' area. If the total of dense areas is higher than 80, set to 1."
+    totalDense = 0
     for x in range(DIGIT_DATUM_WIDTH):
         for y in range(DIGIT_DATUM_HEIGHT):
             total = 0
@@ -97,26 +96,64 @@ def enhancedFeatureExtractorDigit(datum):
                         continue
                     elif datum.getPixel(x+x1, y+y1) > 0:
                         total += 1
-
             if total > 3:
-                total = 1
+                totalDense += 1
 
-            else:
-                total = 0
-            featureSquare[(x, y)] = total
+    if totalDense > 80:
+        features["Density"] = 1
 
-    "Feature which measures Symmetry in the digit"
-    featureSymmetry = util.Counter()
-    for x in range(0, (DIGIT_DATUM_WIDTH/2)):
+    else:
+        features["Density"] = 0
+
+    "Feature which measures Symmetry in the digit. Symmetry is measured horizontally. If the total of symmetric pixels > 350, set feature to 1."
+    symmetryCount = 0
+    # print datum.getPixel(1,0)
+    for x in range(0, (DIGIT_DATUM_WIDTH)):
+        for y in range(0, DIGIT_DATUM_HEIGHT/2):
+            if datum.getPixel(x, y) == datum.getPixel(x, DIGIT_DATUM_HEIGHT-y-1):
+                symmetryCount += 1
+    if symmetryCount > 350:
+        features["Symmetry"] = 1
+    else:
+        features["Symmetry"] = 0
+    # print(features["Symmetry"])
+
+    "Feature which measures Symmetry in the digit. Symmetry is measured vertically. If the total of symmetric pixels > 350, set feature to 1."
+    vert_symmetryCount = 0
+    for x in range(0, DIGIT_DATUM_WIDTH / 2):
         for y in range(0, DIGIT_DATUM_HEIGHT):
-            if datum.getPixel(x, y) == datum.getPixel(DIGIT_DATUM_WIDTH-x-1, DIGIT_DATUM_HEIGHT-y-1):
-                featureSymmetry[(x, y)] = 1
-                featureSymmetry[(DIGIT_DATUM_WIDTH-x, DIGIT_DATUM_HEIGHT-y)] = 1
-            else:
-                featureSymmetry[(x, y)] = 0
-                featureSymmetry[(DIGIT_DATUM_WIDTH-x, DIGIT_DATUM_HEIGHT-y)] = 0
+            if datum.getPixel(x, y) == datum.getPixel(DIGIT_DATUM_WIDTH - x - 1, y):
+                vert_symmetryCount += 1
+    if symmetryCount > 300:
+        features["Vert_symmetry"] = 1
+    else:
+        features["Vert_symmetry"] = 0
 
-    features = featureSymmetry
+
+    "New Feature which does ????"
+
+    "Feature which counts the total of active pixels"
+    pixelCount_top = 0
+    pixelCount_middle = 0
+    pixelCount_bottom = 0
+
+    for x in range(0, DIGIT_DATUM_HEIGHT):
+        for y in range(0, DIGIT_DATUM_WIDTH):
+            if datum.getPixel(x, y) > 0:
+                if(x < DIGIT_DATUM_HEIGHT  * (3/7)):
+                    pixelCount_bottom += 1
+                elif(x > DIGIT_DATUM_HEIGHT *  (3/7) and x < (DIGIT_DATUM_HEIGHT) * (4/7)):
+                    pixelCount_middle += 1
+                else:
+                    pixelCount_top += 1
+    if pixelCount_top > pixelCount_middle and pixelCount_top > pixelCount_bottom:
+        features["pixelCount"] = [0,0,1]
+    elif pixelCount_middle > pixelCount_bottom:
+        features["pixelCount"] = [0,1,0]
+    else:
+        features["pixelCount"] = [1,0,0]
+    # print(pixelCount_top, pixelCount_middle, pixelCount_bottom)
+    # print(features["pixelCount"])
     return features
 
 
