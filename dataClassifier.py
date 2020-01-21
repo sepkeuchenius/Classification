@@ -73,24 +73,31 @@ def enhancedFeatureExtractorDigit(datum):
 
     ## DESCRIBE YOUR ENHANCED FEATURES HERE...
     1st feature: Loops.
-    If there is a ...
+    We keep a Switch where the initial Value is False. If a pixel has a value > 0, then set the Value to True. If there is a column
+    in which the Switch is switched 4 times or more, there is the possibility of a loop happening in the digit. The location of the loop is also a great indication of
+    what digit we're dealing with.
+    We give each column a seperate feature, and for each possible amount of columns of loops we create a seperate feature as well. For example, there are 28 features called
+    "Loop 0, Loop 1," etc. etc. If in a digit there are 4 loops detected, only feature "Loop 4" will have value 4.
+    Following this, we have an extra 4 features which describe the intensity of the loop-amount (pretty evident in the code).
+
     2nd feature: 4 zones
-    ...
+    We divide the digit into 4 zones. If a percentage of pixels (>30%) is active in that zone, the feature for that zone is 1. Otherwise, 0.
+
     3rd feature: 16 zones
-    ...
+    Essentially the same as the 4-zone feature, but this time we create 16 zones which thus create 16 feature with the same threshold (>30% of pixels must be active).
     ##
     """
     features =  basicFeatureExtractorDigit(datum)
 
     "*** YOUR CODE HERE ***"
 
-
+    #Feature 1
     loopCount = 0
     for x in range(DIGIT_DATUM_WIDTH):
         switch = False
         switchCount = 0
         for y in range(DIGIT_DATUM_HEIGHT):
-            if datum.getPixel(x, y) == 1:
+            if datum.getPixel(x, y) != 0:
                 if switch == False:
                     switch = True
                     switchCount += 1
@@ -98,6 +105,7 @@ def enhancedFeatureExtractorDigit(datum):
                 if switch == True:
                     switch = False
                     switchCount += 1
+        # If amount of switches is 4 or higher, then we count the loop and save this as a feature.
         if switchCount > 3:
             loopCount += 1
             features["Looplocation" + str(x)] = 1
@@ -120,7 +128,7 @@ def enhancedFeatureExtractorDigit(datum):
     else:
         features["LoopIntensity_High"] = 1
 
-
+    #Feature 2
     Counter = 0
     for x in range(0, DIGIT_DATUM_WIDTH, DIGIT_DATUM_WIDTH/2):
         for y in range(0, DIGIT_DATUM_HEIGHT, DIGIT_DATUM_HEIGHT/2):
@@ -129,7 +137,6 @@ def enhancedFeatureExtractorDigit(datum):
                 for y1 in range(y, y + DIGIT_DATUM_HEIGHT / 2):
                     if datum.getPixel(x1, y1) != 0:
                         pixelCount += 1.0
-
             if float(pixelCount / 196.0) > 0.3:
                 Counter +=1
                 features["Percentage4" + str(x) + str(y)] = 1
@@ -137,7 +144,7 @@ def enhancedFeatureExtractorDigit(datum):
                 features["Percentage4" + str(x) + str(y)] = 0
 
 
-
+    #Feature 3
     Counter = 0
     for x in range(0, DIGIT_DATUM_WIDTH, DIGIT_DATUM_WIDTH/4):
         for y in range(0, DIGIT_DATUM_HEIGHT, DIGIT_DATUM_HEIGHT/4):
@@ -155,9 +162,6 @@ def enhancedFeatureExtractorDigit(datum):
 
     first_Mid = DIGIT_DATUM_WIDTH /4
     second_Mid = DIGIT_DATUM_WIDTH /2 + first_Mid
-
-
-
 
     return features
 
