@@ -89,6 +89,11 @@ def enhancedFeatureExtractorDigit(datum):
     """
     features =  basicFeatureExtractorDigit(datum)
 
+<<<<<<< HEAD
+=======
+    "*** YOUR CODE HERE ***"
+
+>>>>>>> 2a0eff8921c601b84f6866eddde3ff6de3c01c65
     #Feature 1
     loopCount = 0
     for x in range(DIGIT_DATUM_WIDTH):
@@ -391,8 +396,13 @@ def readCommand( argv ):
 
     if(options.data=="digits"):
         legalLabels = range(10)
+<<<<<<< HEAD
     elif(options.data=='faces'):
         legalLabels = "Face", "Nonface"
+=======
+    elif(options.data=="faces"):
+        legalLabels = [0, 1]
+>>>>>>> 2a0eff8921c601b84f6866eddde3ff6de3c01c65
     else:
         legalLabels = ['Stop', 'West', 'East', 'North', 'South']
 
@@ -482,6 +492,13 @@ def runClassifier(args, options):
         rawTrainingData, trainingLabels = samples.loadPacmanData(trainingData, numTraining)
         rawValidationData, validationLabels = samples.loadPacmanData(validationData, numTest)
         rawTestData, testLabels = samples.loadPacmanData(testData, numTest)
+    elif(options.data=="faces"):
+        rawTrainingData = samples.loadDataFile("facedata/facedatatrain", numTraining,FACE_DATUM_WIDTH,FACE_DATUM_HEIGHT)
+        trainingLabels = samples.loadLabelsFile("facedata/facedatatrainlabels", numTraining)
+        rawValidationData = samples.loadDataFile("facedata/facedatavalidation", numTest,FACE_DATUM_WIDTH,FACE_DATUM_HEIGHT)
+        validationLabels = samples.loadLabelsFile("facedata/facedatavalidationlabels", numTest)
+        rawTestData = samples.loadDataFile("facedata/facedatatest", numTest,FACE_DATUM_WIDTH,FACE_DATUM_HEIGHT)
+        testLabels = samples.loadLabelsFile("facedata/facedatatestlabels", numTest)
     else:
         rawTrainingData = samples.loadDataFile("digitdata/trainingimages", numTraining,DIGIT_DATUM_WIDTH,DIGIT_DATUM_HEIGHT)
         trainingLabels = samples.loadLabelsFile("digitdata/traininglabels", numTraining)
