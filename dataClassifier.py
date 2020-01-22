@@ -89,11 +89,7 @@ def enhancedFeatureExtractorDigit(datum):
     """
     features =  basicFeatureExtractorDigit(datum)
 
-<<<<<<< HEAD
-    "* YOUR CODE HERE *"
-=======
     "*** YOUR CODE HERE ***"
->>>>>>> b4214bc82f6e3a1efee571fd1ca8290be06a8bc6
 
     #Feature 1
     loopCount = 0
@@ -380,6 +376,8 @@ def readCommand( argv ):
 
     if(options.data=="digits"):
         legalLabels = range(10)
+    elif(options.data=="faces"):
+        legalLabels = ['Face', 'Non Face']
     else:
         legalLabels = ['Stop', 'West', 'East', 'North', 'South']
 
