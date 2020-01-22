@@ -89,12 +89,6 @@ def enhancedFeatureExtractorDigit(datum):
     """
     features =  basicFeatureExtractorDigit(datum)
 
-<<<<<<< HEAD
-    "* YOUR CODE HERE *"
-=======
-    "*** YOUR CODE HERE ***"
->>>>>>> b4214bc82f6e3a1efee571fd1ca8290be06a8bc6
-
     #Feature 1
     loopCount = 0
     for x in range(DIGIT_DATUM_WIDTH):
@@ -212,9 +206,26 @@ def enhancedPacmanFeatures(state, action):
 
     food = state.getFood()
     ghosts = state.getGhostPositions()
+    capsules = state.getCapsules()
 
-    print food
-    print ghosts
+    foodnearbyCount = 0
+
+    me = state.getPacmanPosition();
+    me_upperleft = (me[0] - 1, me[1] -1)
+    for y in range(0,3):
+        for x in range(0,3):
+            features['foo_' + str(x) + str(y)] = food[x + me_upperleft[0]][y + me_upperleft[1]]
+            features['ghosts' + str(x) + str(y)] = (x + me_upperleft[0],y + me_upperleft[1]) in ghosts
+            features['capsules' + str(x) + str(y)] = (x + me_upperleft[0],y + me_upperleft[1]) in capsules
+    nearest = (0, ghosts[0])
+    for i in range(0, len(ghosts)):
+        if((me[0] - ghosts[i][0] ** 2) + (me[1] - ghosts[i][1] ** 2) < (me[0] - nearest[1][0] ** 2) + (me[1] - nearest[1][1] ** 2)):
+            nearest = (i, ghosts[i])
+    features['nearest_y'] = nearest[1][1]
+    features['nearest_x'] = nearest[1][0]
+    # print me
+
+
     # util.raiseNotDefined()
     return features
 
@@ -380,6 +391,8 @@ def readCommand( argv ):
 
     if(options.data=="digits"):
         legalLabels = range(10)
+    elif(options.data=='faces'):
+        legalLabels = "Face", "Nonface"
     else:
         legalLabels = ['Stop', 'West', 'East', 'North', 'South']
 
