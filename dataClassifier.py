@@ -89,7 +89,11 @@ def enhancedFeatureExtractorDigit(datum):
     """
     features =  basicFeatureExtractorDigit(datum)
 
+<<<<<<< HEAD
     "* YOUR CODE HERE *"
+=======
+    "*** YOUR CODE HERE ***"
+>>>>>>> b4214bc82f6e3a1efee571fd1ca8290be06a8bc6
 
     #Feature 1
     loopCount = 0
