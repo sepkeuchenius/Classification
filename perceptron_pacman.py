@@ -48,6 +48,7 @@ class PerceptronClassifierPacman(PerceptronClassifier):
 
         for iteration in range(self.max_iterations):
             print "Starting iteration ", iteration, "..."
+            print 'test'
             for i in range(len(trainingData)):
                 "*** YOUR CODE HERE ***"
                 instance = trainingData[i]
