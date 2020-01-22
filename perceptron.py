@@ -62,7 +62,10 @@ class PerceptronClassifier:
                 if not correct_label == guess_label:
                     self.weights[correct_label] = self.weights[correct_label].__add__(instance)
                     self.weights[guess_label] = self.weights[guess_label].__sub__(instance)
+<<<<<<< HEAD
                     
+=======
+>>>>>>> 361528e43e5425699252549fb28a73c9a7508ba2
 
     def classify(self, data):
         """
