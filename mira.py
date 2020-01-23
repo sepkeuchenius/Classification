@@ -67,8 +67,11 @@ class MiraClassifier:
             self.initializeWeightsToZero()
             for iterations in range(self.max_iterations):
                 for i in range(len(trainingData)):
+                    #input data
                     instance = trainingData[i]
+                    #the correct label corresponding with the data
                     correct_label = trainingLabels[i]
+                    #the classified label
                     instance_guess = max(self.classify([instance]))
                     if not instance_guess == correct_label:
                         "The Tau calculations"
@@ -89,8 +92,10 @@ class MiraClassifier:
                         for key,value in instance.iteritems():
                             temp_instance[key] = value * r
 
+                        #update weights
                         self.weights[correct_label] =   self.weights[correct_label].__add__(temp_instance)
                         self.weights[instance_guess] = self.weights[instance_guess].__sub__(temp_instance)
+
             #weights are set, now we need to eval to find best C values
             for i in range(len(validationData)):
                 instance = validationData[i]
@@ -103,8 +108,10 @@ class MiraClassifier:
                 else:
                     false += 1
                 acc = correct/(correct+false)
+                #if this C value yields a higher accuracy, save these weights
                 if(acc > high_acc):
                     best_weights = self.weights
+        #set weights to the weights of the best C-value
         self.weights = best_weights
 
 

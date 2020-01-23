@@ -206,28 +206,37 @@ def enhancedPacmanFeatures(state, action):
     """
     features = util.Counter()
 
+    #next state according to current state and action that is taken
     next_state=  state.generateSuccessor(0, action)
+
+    #get all the food in the game
     food = next_state.getFood()
+    #create list of food coordinates
     food_list = []
     for x,x_ in enumerate(food):
         for y, y_ in enumerate(x_):
             if(y_):
+                #append coordinates to list if food (y_) is true
                 food_list.append((x,y))
-
+    #get ghosts and capsules
     ghosts = next_state.getGhostPositions()
     capsules = next_state.getCapsules()
+    #get position of Pacman
     me = next_state.getPacmanPosition();
 
+    #generate list of distances of the ghost
     if ghosts:
         ghost_min = util.manhattanDistance(me, ghosts[0])
         for ghost in ghosts:
             dis = util.manhattanDistance(me, ghost)
             if dis < ghost_min:
+                #save the smallest distance to a ghost
                 ghost_min  = dis
     else:
+        #no ghosts
         ghost_min = 0
 
-
+    #same extact procedure for food
     if food_list:
         food_min = util.manhattanDistance(me, food_list[0])
         for f in food_list:
@@ -235,13 +244,20 @@ def enhancedPacmanFeatures(state, action):
             if dis < food_min:
                 food_min  = dis
     else:
+        #no food
         food_min = 0
 
+    #save nearest ghost and food distance as separate features
     features['nearest_g'] = ghost_min
     features['nearest_f'] = food_min
 
+    #some other features that are important
+
+    #The score for the next state
     features['next_score'] = next_state.getScore()
+    #The status for the next state
     features['next_status'] = int(next_state.isLose())
+    #the food in the next state
     features['num_food'] = next_state.getNumFood()
 
 
