@@ -51,17 +51,14 @@ class PerceptronClassifierPacman(PerceptronClassifier):
             print 'test'
             for i in range(len(trainingData)):
                 "*** YOUR CODE HERE ***"
+                #input data
                 instance = trainingData[i]
-
+                #correct label corresponding to input label
                 correct_label = trainingLabels[i]
-                # print correct_labe    l
+                #classified label
                 guessed_label = self.classify([instance])[0]
-
-
-
-                # print self.weights
-                # print guessed_label[0]
+                #update weights when wrongly classified
                 if correct_label != guessed_label:
+                    #new weights
                     self.weights = self.weights.__add__(instance[0][correct_label])
                     self.weights = self.weights.__sub__(instance[0][guessed_label])
-                # self.weights = self.weights.__sub__(instance[guessed_label])
