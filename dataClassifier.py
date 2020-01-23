@@ -163,6 +163,7 @@ def enhancedFeatureExtractorDigit(datum):
     first_Mid = DIGIT_DATUM_WIDTH /4
     second_Mid = DIGIT_DATUM_WIDTH /2 + first_Mid
 
+    features = util.Counter()
     return features
 
 
