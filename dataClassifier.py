@@ -89,11 +89,8 @@ def enhancedFeatureExtractorDigit(datum):
     """
     features =  basicFeatureExtractorDigit(datum)
 
-<<<<<<< HEAD
-=======
     "*** YOUR CODE HERE ***"
 
->>>>>>> 2a0eff8921c601b84f6866eddde3ff6de3c01c65
     #Feature 1
     loopCount = 0
     for x in range(DIGIT_DATUM_WIDTH):
@@ -209,25 +206,44 @@ def enhancedPacmanFeatures(state, action):
     """
     features = util.Counter()
 
+    features['action'] = ['Stop', 'West', 'North', 'East', 'South'].index(action)
     food = state.getFood()
     ghosts = state.getGhostPositions()
     capsules = state.getCapsules()
+    me = state.getPacmanPosition();
+
+
+    for ghost in ghosts:
+        features['g_' + str(ghost)] = util.manhattanDistance(me, ghost)
+        dif = [(me[0] - ghost[0]), (me[1] - ghost[1])]
+        if(dif[0]**2 >= dif[1]**2):
+            if(dif[0] >= 0):
+                features['dir_g_' + str(ghost)] = 1
+            else:
+                features['dir_g_' + str(ghost)] = 2
+        else:
+            if(dif[1] >= 0):
+                features['dir_g_' + str(ghost)] = 3
+                features['dir_g_' + str(ghost)] = 4
+    # for some in food:
+    #     # features['f_' + str(some)] = util.manhattanDistance(me, some)
+    # for capsule in capsules:
+    #     # features['c_' + str(capsules)] = util.manhattanDistance(me, capsule)
 
     foodnearbyCount = 0
 
-    me = state.getPacmanPosition();
     me_upperleft = (me[0] - 1, me[1] -1)
-    for y in range(0,3):
-        for x in range(0,3):
-            features['foo_' + str(x) + str(y)] = food[x + me_upperleft[0]][y + me_upperleft[1]]
-            features['ghosts' + str(x) + str(y)] = (x + me_upperleft[0],y + me_upperleft[1]) in ghosts
-            features['capsules' + str(x) + str(y)] = (x + me_upperleft[0],y + me_upperleft[1]) in capsules
-    nearest = (0, ghosts[0])
-    for i in range(0, len(ghosts)):
-        if((me[0] - ghosts[i][0] ** 2) + (me[1] - ghosts[i][1] ** 2) < (me[0] - nearest[1][0] ** 2) + (me[1] - nearest[1][1] ** 2)):
-            nearest = (i, ghosts[i])
-    features['nearest_y'] = nearest[1][1]
-    features['nearest_x'] = nearest[1][0]
+    features['nearest_G'] = min([util.manhattanDistance(me, x) for x in ghosts])
+    features['nearest_F'] = min([util.manhattanDistance(me, x) for x in food])
+    # features['nearest_C'] = min([util.manhattanDistance(me, x) for x in capsules])
+
+    # features['successor_x'] = state.generateSuccessor(0, action).getPacmanPosition()[0]
+    # features['successor_y'] = state.generateSuccessor(0, action).getPacmanPosition()[1]
+    features['state_win'] = state.isWin()
+    features['state_lose'] = state.isLose()
+    features['score'] = state.getScore() * 10
+    # features['nearest_y'] = nearest[1][1]
+
     # print me
 
 
@@ -396,13 +412,8 @@ def readCommand( argv ):
 
     if(options.data=="digits"):
         legalLabels = range(10)
-<<<<<<< HEAD
-    elif(options.data=='faces'):
-        legalLabels = "Face", "Nonface"
-=======
     elif(options.data=="faces"):
         legalLabels = [0, 1]
->>>>>>> 2a0eff8921c601b84f6866eddde3ff6de3c01c65
     else:
         legalLabels = ['Stop', 'West', 'East', 'North', 'South']
 

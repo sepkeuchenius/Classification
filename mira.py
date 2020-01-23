@@ -62,7 +62,9 @@ class MiraClassifier:
         """
         "*** YOUR CODE HERE ***"
         "Iterating over the iterations and the instances"
+        high_acc = 0
         for C in Cgrid:
+            self.weights = util.Counter()
             for iterations in range(self.max_iterations):
                 for i in range(len(trainingData)):
                     instance = trainingData[i]
@@ -89,7 +91,21 @@ class MiraClassifier:
 
                         self.weights[correct_label] =   self.weights[correct_label].__add__(temp_instance)
                         self.weights[instance_guess] = self.weights[instance_guess].__sub__(temp_instance)
-
+            #weights are set, now we need to eval to find best C values
+            for i in range(len(validationData)):
+                instance = validationData[i]
+                correct_label = validationLabels[i]
+                guessed_label = max(self.classify(instance))
+                correct = 0
+                false = 0
+                if(correct_label == guessed_label):
+                    correct += 1
+                else:
+                    false += 1
+                acc = correct/(correct+false)
+                if(acc > high_acc):
+                    best_weights = self.weights
+        self.weights = best_weights
 
 
     def classify(self, data ):
