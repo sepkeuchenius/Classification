@@ -64,7 +64,7 @@ class MiraClassifier:
         "Iterating over the iterations and the instances"
         high_acc = 0
         for C in Cgrid:
-            self.weights = util.Counter()
+            self.initializeWeightsToZero()
             for iterations in range(self.max_iterations):
                 for i in range(len(trainingData)):
                     instance = trainingData[i]
@@ -95,7 +95,7 @@ class MiraClassifier:
             for i in range(len(validationData)):
                 instance = validationData[i]
                 correct_label = validationLabels[i]
-                guessed_label = max(self.classify(instance))
+                guessed_label = max(self.classify([instance]))
                 correct = 0
                 false = 0
                 if(correct_label == guessed_label):

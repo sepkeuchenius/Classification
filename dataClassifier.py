@@ -206,48 +206,45 @@ def enhancedPacmanFeatures(state, action):
     """
     features = util.Counter()
 
-    features['action'] = ['Stop', 'West', 'North', 'East', 'South'].index(action)
-    food = state.getFood()
-    ghosts = state.getGhostPositions()
-    capsules = state.getCapsules()
-    me = state.getPacmanPosition();
+    next_state=  state.generateSuccessor(0, action)
+    food = next_state.getFood()
+    food_list = []
+    for x,x_ in enumerate(food):
+        for y, y_ in enumerate(x_):
+            if(y_):
+                food_list.append((x,y))
+
+    ghosts = next_state.getGhostPositions()
+    capsules = next_state.getCapsules()
+    me = next_state.getPacmanPosition();
+
+    if ghosts:
+        ghost_min = util.manhattanDistance(me, ghosts[0])
+        for ghost in ghosts:
+            dis = util.manhattanDistance(me, ghost)
+            if dis < ghost_min:
+                ghost_min  = dis
+    else:
+        ghost_min = 0
 
 
-    for ghost in ghosts:
-        features['g_' + str(ghost)] = util.manhattanDistance(me, ghost)
-        dif = [(me[0] - ghost[0]), (me[1] - ghost[1])]
-        if(dif[0]**2 >= dif[1]**2):
-            if(dif[0] >= 0):
-                features['dir_g_' + str(ghost)] = 1
-            else:
-                features['dir_g_' + str(ghost)] = 2
-        else:
-            if(dif[1] >= 0):
-                features['dir_g_' + str(ghost)] = 3
-                features['dir_g_' + str(ghost)] = 4
-    # for some in food:
-    #     # features['f_' + str(some)] = util.manhattanDistance(me, some)
-    # for capsule in capsules:
-    #     # features['c_' + str(capsules)] = util.manhattanDistance(me, capsule)
+    if food_list:
+        food_min = util.manhattanDistance(me, food_list[0])
+        for f in food_list:
+            dis = util.manhattanDistance(me, f)
+            if dis < food_min:
+                food_min  = dis
+    else:
+        food_min = 0
 
-    foodnearbyCount = 0
+    features['nearest_g'] = ghost_min
+    features['nearest_f'] = food_min
 
-    me_upperleft = (me[0] - 1, me[1] -1)
-    features['nearest_G'] = min([util.manhattanDistance(me, x) for x in ghosts])
-    features['nearest_F'] = min([util.manhattanDistance(me, x) for x in food])
-    # features['nearest_C'] = min([util.manhattanDistance(me, x) for x in capsules])
-
-    # features['successor_x'] = state.generateSuccessor(0, action).getPacmanPosition()[0]
-    # features['successor_y'] = state.generateSuccessor(0, action).getPacmanPosition()[1]
-    features['state_win'] = state.isWin()
-    features['state_lose'] = state.isLose()
-    features['score'] = state.getScore() * 10
-    # features['nearest_y'] = nearest[1][1]
-
-    # print me
+    features['next_score'] = next_state.getScore()
+    features['next_status'] = int(next_state.isLose())
+    features['num_food'] = next_state.getNumFood()
 
 
-    # util.raiseNotDefined()
     return features
 
 
