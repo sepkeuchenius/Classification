@@ -61,7 +61,8 @@ class MiraClassifier:
         representing a vector of values.
         """
         "*** YOUR CODE HERE ***"
-        "Iterating over the iterations and the instances"
+
+        #Iterating over the iterations and the instances
         high_acc = 0
         for C in Cgrid:
             self.initializeWeightsToZero()
@@ -74,7 +75,7 @@ class MiraClassifier:
                     #the classified label
                     instance_guess = max(self.classify([instance]))
                     if not instance_guess == correct_label:
-                        "The Tau calculations"
+                        #The Tau calculations
 
                         x = self.weights[instance_guess].__sub__(self.weights[correct_label])
                         y = x.__mul__(instance)
@@ -87,7 +88,7 @@ class MiraClassifier:
                             float_div = float(y / z)
                             r = min([C, float_div])
 
-                        "multiply instance by r"
+                        #multiply instance by r
                         temp_instance = instance.copy()
                         for key,value in instance.iteritems():
                             temp_instance[key] = value * r
@@ -97,20 +98,21 @@ class MiraClassifier:
                         self.weights[instance_guess] = self.weights[instance_guess].__sub__(temp_instance)
 
             #weights are set, now we need to eval to find best C values
+            correct = 0
+            false = 0
             for i in range(len(validationData)):
                 instance = validationData[i]
                 correct_label = validationLabels[i]
                 guessed_label = max(self.classify([instance]))
-                correct = 0
-                false = 0
                 if(correct_label == guessed_label):
                     correct += 1
                 else:
                     false += 1
-                acc = correct/(correct+false)
-                #if this C value yields a higher accuracy, save these weights
-                if(acc > high_acc):
-                    best_weights = self.weights
+            acc = correct/float(correct+false)
+            #if this C value yields a higher accuracy, save these weights
+            if(acc > high_acc):
+                best_weights = self.weights
+                high_acc = acc
         #set weights to the weights of the best C-value
         self.weights = best_weights
 
