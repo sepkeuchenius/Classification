@@ -115,7 +115,9 @@ class MiraClassifier:
                 high_acc = acc
         #set weights to the weights of the best C-value
         self.weights = best_weights
-
+        for y in trainingLabels:
+            print y
+            print(self.findHighWeightFeatures(y))
 
     def classify(self, data ):
         """
@@ -131,3 +133,23 @@ class MiraClassifier:
                 vectors[l] = self.weights[l] * datum
             guesses.append(vectors.argMax())
         return guesses
+
+    def findHighWeightFeatures(self, label):
+        """
+        Returns a list of the 100 features with the greatest weight for some label
+        """
+
+        featuresWeights = []
+
+        "*** YOUR CODE HERE ***"
+
+        weights = self.weights[label].values()
+        features= self.weights[label].keys()
+
+        for i in range(0, len(weights)):
+            weight = weights[i]
+            feature = features[i]
+            featuresWeights.append([weight, feature])
+        featuresWeights.sort(reverse = True)
+        return [x[1] for x in featuresWeights[0:100]]
+        # util.raiseNotDefined()
